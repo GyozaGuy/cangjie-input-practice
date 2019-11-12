@@ -1,0 +1,26 @@
+<%
+const {
+  components = [],
+  css = [],
+  mjs = [],
+  title = 'Replace Me'
+} = config
+%>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %> - Cangjie Input Practice</title>
+    <link href="/pages/<%= page %>/<%= page %>.css" rel="stylesheet">
+    <% css.forEach(c => { %>
+      <link href="<%= c %>.css" rel="stylesheet">
+    <% }) %>
+    <% components.forEach(c => { %>
+      <script src="/components/<%= c %>/<%= c %>.mjs" type="module"></script>
+    <% }) %>
+    <% mjs.forEach(m => { %>
+      <script src="<%= m %>.mjs" type="module"></script>
+    <% }) %>
+  </head>
+
+  <body>

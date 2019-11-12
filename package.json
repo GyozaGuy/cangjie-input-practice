@@ -1,0 +1,30 @@
+{
+  "name": "cangjie-input-practice",
+  "version": "1.0.0",
+  "description": "Cangjie input practice",
+  "main": "server/server.mjs",
+  "scripts": {
+    "start": "nodemon -r dotenv/config --experimental-modules server/server.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GyozaGuy/cangjie-input-practice.git"
+  },
+  "author": "GyozaGuy",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/GyozaGuy/cangjie-input-practice/issues"
+  },
+  "homepage": "https://github.com/GyozaGuy/cangjie-input-practice#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "nodemon": "^1.19.4",
+    "zh-cangjie": "^0.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0"
+  }
+}
