@@ -1,7 +1,7 @@
 import express from 'express'
 import http from 'http'
 
-import { createWSServer } from './helpers/websocketServer.mjs'
+import { setupWSServer } from './helpers/cangjieSocketServerHelper.mjs'
 
 import pages from './routes/pages.mjs'
 import api from './routes/api.mjs'
@@ -29,7 +29,7 @@ app.use('/api', api)
 
 const server = http.createServer(app)
 
-app.wss = createWSServer(server)
+setupWSServer(app, server)
 
 server.listen(port)
 server.on('error', onError)
