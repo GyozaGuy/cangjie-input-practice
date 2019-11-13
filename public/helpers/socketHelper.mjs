@@ -3,9 +3,7 @@ const ssl = location.protocol === 'https:'
 export function connect() {
   return new Promise((resolve, reject) => {
     try {
-      const id = `socket_${Math.random()
-        .toString(36)
-        .substr(2, 9)}`
+      const id = `socket_${generateId()}`
       const socket = new WebSocket(`ws${ssl ? 's' : ''}://${location.host}`)
       const socketListeners = {}
 
@@ -21,6 +19,9 @@ export function connect() {
             socketListeners[message].forEach(listener => {
               listener(data)
             })
+          } else {
+            // NOTE: execution should only get here if helperObject.get() was used
+            socketListeners[message](data)
           }
         })
 
@@ -30,6 +31,16 @@ export function connect() {
           },
           emit(message, data) {
             socket.send(JSON.stringify({ id, message, data }))
+          },
+          get(message, data) {
+            return new Promise(resolve => {
+              const responseId = generateId()
+              socketListeners[responseId] = data => {
+                delete socketListeners[responseId]
+                resolve(data)
+              }
+              socket.send(JSON.stringify({ id, message, data, responseId }))
+            })
           },
           join(targetChannel = 'public') {
             socket.send(JSON.stringify({ channel: targetChannel, id, message: 'JOIN_CHANNEL' }))
@@ -51,6 +62,12 @@ export function connect() {
       reject(err)
     }
   })
+}
+
+function generateId() {
+  return Math.random()
+    .toString(36)
+    .substr(2, 9)
 }
 
 export default {

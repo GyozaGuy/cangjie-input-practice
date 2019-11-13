@@ -5,6 +5,7 @@ const WSServer = ws.Server
 const channels = {
   public: []
 }
+const listeners = []
 
 export function createWSServer(server) {
   const wss = new WSServer({ server })
@@ -15,7 +16,7 @@ export function createWSServer(server) {
     })
 
     ws.on('message', messageObj => {
-      const { channel, message, data } = JSON.parse(messageObj)
+      const { channel, message, data, responseId } = JSON.parse(messageObj)
 
       if (channel && message === 'JOIN_CHANNEL') {
         if (!channels[channel]) {
@@ -40,10 +41,26 @@ export function createWSServer(server) {
             .forEach(client => {
               client.send(JSON.stringify({ message, data }))
             })
+
+          listeners.forEach(async listener => {
+            if (listener.message === message) {
+              if (responseId) {
+                ws.send(JSON.stringify({ message: responseId, data: await listener.cb(data) }))
+              } else {
+                ws.send(JSON.stringify({ message, data: await listener.cb(data) }))
+              }
+            }
+          })
         }
       }
     })
   })
+
+  wss.onMessage = (message, cb) => {
+    listeners.push({ message, cb })
+  }
+
+  return wss
 }
 
 export default {
