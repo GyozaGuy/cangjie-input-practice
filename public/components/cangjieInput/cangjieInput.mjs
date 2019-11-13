@@ -68,7 +68,7 @@ customElements.define(
       this.alphaCodeBox = this.querySelector('.cangjieInput_alphaCode')
       const input = this.querySelector('input')
 
-      input.addEventListener('keyup', async event => {
+      input.addEventListener('keypress', async event => {
         const {
           code,
           target: { value }
