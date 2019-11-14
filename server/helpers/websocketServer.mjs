@@ -11,6 +11,11 @@ export function createWSServer(server) {
   const wss = new WSServer({ server })
 
   wss.on('connection', ws => {
+    // Setup ping/pong
+    ws.isAlive = true
+
+    ws.on('pong', () => (ws.isAlive = true))
+
     ws.on('error', error => {
       console.error(error)
     })
@@ -59,6 +64,17 @@ export function createWSServer(server) {
   wss.onMessage = (message, cb) => {
     listeners.push({ message, cb })
   }
+
+  setInterval(() => {
+    wss.clients.forEach(ws => {
+      if (!ws.isAlive) {
+        return ws.terminate()
+      }
+
+      ws.isAlive = false
+      ws.ping(() => {})
+    })
+  }, 30000)
 
   return wss
 }
