@@ -111,7 +111,7 @@ customElements.define(
           target: { value }
         } = event
 
-        if (code === 'Enter') {
+        if (code === 'Space') {
           event.preventDefault()
 
           if (
