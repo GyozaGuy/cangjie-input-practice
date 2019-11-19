@@ -34,17 +34,19 @@ customElements.define(
             padding: 10px;
             width: 100%;
           }
-          cangjie-input .cangjieInput_codeContainer {
-            height: 30px;
+          cangjie-input .cangjieInput_descContainer {
+            margin-top: 20px;
+            text-align: left;
           }
-          cangjie-input .cangjieInput_codeContainer:not([visible]) {
+          cangjie-input .cangjieInput_descContainer:not([visible]) {
             visibility: hidden;
           }
-          cangjie-input .cangjieInput_codeContainer[visible] {
-            align-items: center;
-            display: flex;
-            justify-content: space-between;
+          cangjie-input .cangjieInput_descContainer[visible] {
             visibility: visible;
+          }
+          cangjie-input .cangjieInput_definition {
+            font-size: 1.5em;
+            margin-top: 20px;
           }
         </style>
 
@@ -52,20 +54,35 @@ customElements.define(
 
         <input type="text">
 
-        <div class="cangjieInput_codeContainer">
+        <div class="cangjieInput_descContainer">
           <div>
-            Cangjie: <strong class="cangjieInput_cangjieCode"></strong>
+            <strong>Cangjie:</strong> <span class="cangjieInput_cangjieCode"></span>
           </div>
+
           <div>
-            Alpha: <strong class="cangjieInput_alphaCode"></strong>
+            <strong>Alpha:</strong> <span class="cangjieInput_alphaCode"></span>
           </div>
+
+          <div>
+            <strong>Simplified:</strong> <span class="cangjieInput_simpChar"></span>
+          </div>
+
+          <div>
+            <strong>Pronunciation:</strong> <span class="cangjieInput_pronunciation"></span>
+          </div>
+
+          <div class="cangjieInput_definition"></div>
         </div>
       `
 
       this.testCharacterBox = this.querySelector('.cangjieInput_testCharacter')
-      this.codeContainer = this.querySelector('.cangjieInput_codeContainer')
       this.cangjieCodeBox = this.querySelector('.cangjieInput_cangjieCode')
       this.alphaCodeBox = this.querySelector('.cangjieInput_alphaCode')
+      this.descContainer = this.querySelector('.cangjieInput_descContainer')
+      this.simpCharBox = this.querySelector('.cangjieInput_simpChar')
+      this.pronunciationBox = this.querySelector('.cangjieInput_pronunciation')
+      this.definitionBox = this.querySelector('.cangjieInput_definition')
+
       const input = this.querySelector('input')
 
       input.addEventListener('keypress', async event => {
@@ -84,13 +101,13 @@ customElements.define(
             this.testCharacterBox.removeAttribute('correct')
             this.testCharacterBox.removeAttribute('incorrect')
             input.value = ''
-            this.codeContainer.removeAttribute('visible')
+            this.descContainer.removeAttribute('visible')
             this.selectRandomTestCharacter()
           } else {
             const result = await testCangjieForCharacter(value, this.character)
 
             this.testCharacterBox.setAttribute(result ? 'correct' : 'incorrect', '')
-            this.codeContainer.setAttribute('visible', '')
+            this.descContainer.setAttribute('visible', '')
           }
         }
       })
@@ -104,12 +121,16 @@ customElements.define(
     }
 
     async selectRandomTestCharacter() {
-      const characterLists = await getCharacterLists()
       // TODO: select character lists
-      const { character, codes } = await getRandomCharacter(characterLists)
+      const characterLists = await getCharacterLists()
+      const { characters, codes, english, pinyin } = await getRandomCharacter(characterLists)
+      const { simp, trad } = characters
 
-      this.character = character
+      this.character = trad
       this.codes = codes
+      this.simpChar = simp
+      this.pronunciation = pinyin.join(', ')
+      this.definition = english.join(', ')
     }
 
     get character() {
@@ -123,6 +144,18 @@ customElements.define(
     set codes({ alpha, cangjie }) {
       this.cangjieCodeBox.textContent = cangjie
       this.alphaCodeBox.textContent = alpha
+    }
+
+    set definition(definition) {
+      this.definitionBox.textContent = definition
+    }
+
+    set pronunciation(pronunciation) {
+      this.pronunciationBox.textContent = pronunciation
+    }
+
+    set simpChar(character) {
+      this.simpCharBox.textContent = character
     }
   }
 )

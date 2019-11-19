@@ -1,4 +1,5 @@
 import cangjie from 'zh-cangjie'
+import dict from '@nahanil/zhdict-lite'
 
 import { createWSServer } from './websocketServer.mjs'
 import characterLists from './characterLists.json'
@@ -36,8 +37,12 @@ export function setupWSServer(app, server) {
 
     const character = characterPool[Math.floor(Math.random() * characterPool.length)]
     const codes = await forCharacter(character)
+    const charInfo = await dict.search(character)
+    const simpChar = charInfo[0].simplified
+    const english = charInfo.map(ch => ch.english)
+    const pinyin = charInfo.map(ch => ch.pinyin)
 
-    return { character, codes }
+    return { characters: { simp: simpChar, trad: character }, codes, english, pinyin }
   })
 
   app.wss.onMessage('testCangjieForCharacter', async ({ character, code }) => {
