@@ -55,7 +55,7 @@ customElements.define(
 
         <div class="cangjieInput_testCharacter"></div>
 
-        <input type="text">
+        <input maxlength="5" type="text">
 
         <div class="cangjieInput_charListContainer"></div>
 
