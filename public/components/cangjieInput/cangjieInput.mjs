@@ -68,15 +68,15 @@ customElements.define(
             <strong>Alpha:</strong> <span class="cangjieInput_alphaCode"></span>
           </div>
 
-          <div>
+          <div hidden>
             <strong>Simplified:</strong> <span class="cangjieInput_simpChar"></span>
           </div>
 
-          <div>
+          <div hidden>
             <strong>Pronunciation:</strong> <span class="cangjieInput_pronunciation"></span>
           </div>
 
-          <div class="cangjieInput_definition"></div>
+          <div class="cangjieInput_definition" hidden></div>
         </div>
       `
 
@@ -154,14 +154,16 @@ customElements.define(
     }
 
     async selectRandomTestCharacter() {
-      const { characters, codes, english, pinyin } = await getRandomCharacter(this.characterLists)
+      const { characters, codes /* english, pinyin */ } = await getRandomCharacter(
+        this.characterLists
+      )
       const { simp, trad } = characters
 
       this.character = trad
       this.codes = codes
       this.simpChar = simp
-      this.pronunciation = pinyin.join(', ')
-      this.definition = english.join(', ')
+      // this.pronunciation = pinyin.join(', ')
+      // this.definition = english.join(', ')
     }
 
     get character() {
