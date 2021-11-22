@@ -4,7 +4,7 @@
   "description": "Cangjie input practice",
   "main": "server/server.mjs",
   "scripts": {
-    "start": "nodemon -r dotenv/config --experimental-modules server/server.mjs",
+    "start": "nodemon -r dotenv/config --experimental-modules --experimental-json-modules server/server.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,14 +19,14 @@
   "homepage": "https://github.com/GyozaGuy/cangjie-input-practice#readme",
   "dependencies": {
     "@nahanil/zhdict-lite": "0.0.1",
-    "dotenv": "^8.2.0",
-    "ejs": "^2.7.1",
+    "dotenv": "^8.6.0",
+    "ejs": "^2.7.4",
     "express": "^4.17.1",
     "nodemon": "^1.19.4",
-    "ws": "^7.2.0",
+    "ws": "^7.5.5",
     "zh-cangjie": "^0.2.0"
   },
   "devDependencies": {
-    "eslint": "^6.6.0"
+    "eslint": "^6.8.0"
   }
 }
