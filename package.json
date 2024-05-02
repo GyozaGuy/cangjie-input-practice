@@ -20,7 +20,7 @@
   "dependencies": {
     "@nahanil/zhdict-lite": "0.0.1",
     "dotenv": "^8.6.0",
-    "ejs": "^3.1.7",
+    "ejs": "^3.1.10",
     "express": "^4.19.2",
     "nodemon": "^2.0.20",
     "tar": ">=6.2.1",
